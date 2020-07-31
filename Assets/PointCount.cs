@@ -8,7 +8,6 @@ public class PointCount : MonoBehaviour {
 	private GameObject pointText;
 	//
 	private int gamePoint=0;
-	private int updateFlag=0;
 
 	// Use this for initialization
 	void Start () {
@@ -18,12 +17,7 @@ public class PointCount : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(updateFlag==1){
-			//PointTextに得点を表示
-			this.pointText.GetComponent<Text>().text=gamePoint.ToString();
-			//Debug.Log (gamePoint);
-			updateFlag=0;
-		}
+
 	}
 
 	//衝突時に呼ばれる関数
@@ -35,7 +29,8 @@ public class PointCount : MonoBehaviour {
 		} else if (collision.gameObject.tag == "SmallCloudTag" || collision.gameObject.tag == "LargeCloudTag") {
 			this.gamePoint += 1;
 		}
-		//Debug.Log (gamePoint);
-		updateFlag=1;
+
+		//PointTextに得点を表示
+		this.pointText.GetComponent<Text>().text=gamePoint.ToString();
 	}
 }

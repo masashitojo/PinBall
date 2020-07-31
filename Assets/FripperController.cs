@@ -10,15 +10,15 @@ public class FripperController : MonoBehaviour {
 	//弾いたときの動き
 	private float flickAngle=-20;
 
-
-
+	//
+	private int firpperID=0;
 
 
 	// Use this for initialization
 	void Start () {
 		//HingeJointコンポーネント取得
 		this.myHingeJoint= GetComponent<HingeJoint>();
-		Debug.Log ("this="+this+" gameObjecy="+this.gameObject);
+		Debug.Log ("this="+this+" gameObjecy="+gameObject);
 
 		//フリッパーの傾きを設定
 		SetAngle(this.defaultAngle);
@@ -44,26 +44,28 @@ public class FripperController : MonoBehaviour {
 			SetAngle (this.defaultAngle);
 		}
 
-		//発展課題(マルチタッチ)
-		foreach (Touch t in Input.touches) {
+		//発展課題(マルチタッチ)提出2回目
 			//Debug.Log ("id="+ t.fingerId +"pha="+t.phase+" pos="+t.position+" wid="+Screen.width/2);
-			//画面左側をタップしたとき、左フリッパーを動かす
-			if (t.phase == TouchPhase.Began && t.position.x <=(Screen.width/2) && tag == "LeftFripperTag") {
-				SetAngle (this.flickAngle);
+		//画面左側をタップしたとき、左フリッパーを上げる。該当するIDのタップが離されたら下げる。
+			if (tag == "LeftFripperTag") {
+				if(t.phase == TouchPhase.Began && t.position.x <=(Screen.width/2)){
+					SetAngle (this.flickAngle);
+					firpperID = t.fingerId;
+				} else if(t.phase == TouchPhase.Ended && firpperID==t.fingerId){
+					SetAngle (this.defaultAngle);
+				}
 			}
-			//画面右側をタップしたとき、右フリッパーを動かす
-			if (t.phase == TouchPhase.Began && t.position.x >(Screen.width/2) && tag == "RightFripperTag") {
-				SetAngle (this.flickAngle);
+
+			//画面右側をタップしたとき、右フリッパーを上げる。該当するIDのタップが離されたら下げる。
+			if(tag == "RightFripperTag"){
+				if (t.phase == TouchPhase.Began && t.position.x >(Screen.width/2)) {
+					SetAngle (this.flickAngle);
+					firpperID = t.fingerId;
+				} else if(t.phase == TouchPhase.Ended && firpperID==t.fingerId){
+					SetAngle (this.defaultAngle);
+				}
 			}
-				
-			//画面左側のタップを離したとき、左フリッパーを元に戻す
-			if (t.phase == TouchPhase.Ended && t.position.x <=(Screen.width/2) && tag == "LeftFripperTag") {
-				SetAngle (this.defaultAngle);
-			}
-			//画面右側のタップを離したとき、右フリッパーを元に戻す
-			if (t.phase == TouchPhase.Ended && t.position.x >(Screen.width/2) && tag == "RightFripperTag") {
-				SetAngle (this.defaultAngle);
-			}
+
 		}
 
 	}
