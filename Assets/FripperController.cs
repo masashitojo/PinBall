@@ -9,8 +9,7 @@ public class FripperController : MonoBehaviour {
 	private float defaultAngle=20;
 	//弾いたときの動き
 	private float flickAngle=-20;
-
-	//
+	//タップID
 	private int firpperID=0;
 
 
@@ -25,7 +24,8 @@ public class FripperController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		//左矢印キーを押したとき、左フリッパーを動かす
 		if (Input.GetKeyDown (KeyCode.LeftArrow) && tag == "LeftFripperTag") {
 			SetAngle (this.flickAngle);
@@ -45,30 +45,31 @@ public class FripperController : MonoBehaviour {
 		}
 
 		//発展課題(マルチタッチ)提出2回目
-			//Debug.Log ("id="+ t.fingerId +"pha="+t.phase+" pos="+t.position+" wid="+Screen.width/2);
-		//画面左側をタップしたとき、左フリッパーを上げる。該当するIDのタップが離されたら下げる。
+		//Debug.Log ("id="+ t.fingerId +"pha="+t.phase+" pos="+t.position+" wid="+Screen.width/2);
+		foreach (Touch t in Input.touches) {
+			//画面左側をタップしたとき、左フリッパーを上げる。該当するIDのタップが離されたら下げる。
 			if (tag == "LeftFripperTag") {
-				if(t.phase == TouchPhase.Began && t.position.x <=(Screen.width/2)){
+				if (t.phase == TouchPhase.Began && t.position.x <= (Screen.width / 2)) {
 					SetAngle (this.flickAngle);
 					firpperID = t.fingerId;
-				} else if(t.phase == TouchPhase.Ended && firpperID==t.fingerId){
+				} else if (t.phase == TouchPhase.Ended && firpperID == t.fingerId) {
 					SetAngle (this.defaultAngle);
 				}
 			}
 
 			//画面右側をタップしたとき、右フリッパーを上げる。該当するIDのタップが離されたら下げる。
-			if(tag == "RightFripperTag"){
-				if (t.phase == TouchPhase.Began && t.position.x >(Screen.width/2)) {
+			if (tag == "RightFripperTag") {
+				if (t.phase == TouchPhase.Began && t.position.x > (Screen.width / 2)) {
 					SetAngle (this.flickAngle);
 					firpperID = t.fingerId;
-				} else if(t.phase == TouchPhase.Ended && firpperID==t.fingerId){
+				} else if (t.phase == TouchPhase.Ended && firpperID == t.fingerId) {
 					SetAngle (this.defaultAngle);
 				}
 			}
 
 		}
-
 	}
+		
 	//フリッパーの傾きを設定
 	public void SetAngle(float angle){
 		JointSpring jointSpr=this.myHingeJoint.spring;
